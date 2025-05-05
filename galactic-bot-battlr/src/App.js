@@ -14,6 +14,8 @@ function App() {
       .then((data) => setBots(data));
   }, []);
 
+  console.log("App component rendered");
+  
   return (
     <div className="App">
       <h1>Galactic Bot Battlr</h1>
