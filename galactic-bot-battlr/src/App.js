@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import BotCollection from "./components/BotCollection";
 import YourBotArmy from "./components/YourBotArmy";
 import BotSpecs from "./components/BotSpecs";
+import SortBar from "./components/SortBar";
 import "./App.css";
 
 function App() {
   const [bots, setBots] = useState([]);
   const [army, setArmy] = useState([]);
   const [selectedBot, setSelectedBot] = useState(null);
+  const [sortBy, setSortBy] = useState(null); // New state for sorting
 
   // Fetch bots from backend
   useEffect(() => {
@@ -39,6 +41,17 @@ function App() {
     });
   }
 
+  // Sorting handler
+  function handleSort(criteria) {
+    setSortBy(criteria);
+  }
+
+  // Sort bots before displaying
+  const sortedBots = [...bots].sort((a, b) => {
+    if (!sortBy) return 0;
+    return b[sortBy] - a[sortBy];
+  });
+
   return (
     <div className="App">
       <h1>Galactic Bot Battlr</h1>
@@ -51,13 +64,14 @@ function App() {
         />
       ) : (
         <>
+          <SortBar onSort={handleSort} />
           <YourBotArmy
             army={army}
             onRemove={handleRemoveFromArmy}
             onDischarge={handleDischarge}
           />
           <BotCollection
-            bots={bots}
+            bots={sortedBots}
             army={army}
             onBotClick={setSelectedBot}
           />
